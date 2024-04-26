@@ -1,6 +1,5 @@
 package com.liapkalo.pumb.aboutanimal.service;
 
-import com.liapkalo.pumb.aboutanimal.entity.dto.AnimalDto;
 import com.liapkalo.pumb.aboutanimal.service.impl.ReadCsvFileServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static com.liapkalo.pumb.aboutanimal.utils.CsvUtils.*;
-import static com.liapkalo.pumb.aboutanimal.utils.DtoUtils.buildAnimalDto;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class ReadCsvFileServiceTests {
 
