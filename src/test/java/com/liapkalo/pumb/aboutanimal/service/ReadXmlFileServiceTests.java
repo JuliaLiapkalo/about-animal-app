@@ -16,7 +16,8 @@ import java.io.InputStream;
 import static com.liapkalo.pumb.aboutanimal.utils.XmlUtils.buildValidXml;
 import static com.liapkalo.pumb.aboutanimal.utils.XmlUtils.buildXmlWithInvalidAnimal;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class ReadXmlFileServiceTests {
 

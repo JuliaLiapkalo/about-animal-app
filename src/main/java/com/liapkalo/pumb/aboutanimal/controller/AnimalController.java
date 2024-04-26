@@ -2,7 +2,6 @@ package com.liapkalo.pumb.aboutanimal.controller;
 
 import com.liapkalo.pumb.aboutanimal.factory.ReadFileFactory;
 import com.liapkalo.pumb.aboutanimal.service.AnimalService;
-import jakarta.xml.bind.JAXBException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -10,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.FileNotFoundException;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ public class AnimalController {
 
     @PostMapping("/uploads")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> processAnimalFile(@RequestParam("file") MultipartFile file) throws JAXBException, FileNotFoundException {
+    public ResponseEntity<?> processAnimalFile(@RequestParam("file") MultipartFile file) {
         readFileFactory.getFileReader(file).readFile(file);
         return ResponseEntity.ok().build();
     }

@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static com.liapkalo.pumb.aboutanimal.utils.DtoUtils.buildAnimalDto;
+
 
 @Service
 @AllArgsConstructor
@@ -26,15 +28,19 @@ public class ReadCsvFileServiceImpl implements ReadFileService {
             if (isCvsValid(csvHeader)) {
                 String[] nextLine;
                 while ((nextLine = reader.readNext()) != null) {
-                    if (isLineValid(nextLine)) {
-                        animalService.createAnimal(animalService.buildAnimalDto(nextLine));
-                    }
+                    createAnimal(nextLine);
                 }
             }
 
             } catch(IOException | CsvValidationException e){
                 throw new RuntimeException(e);
             }
+    }
+
+    private void createAnimal(String[] nextLine) {
+        if (isLineValid(nextLine)) {
+            animalService.createAnimal(buildAnimalDto(nextLine));
+        }
     }
 
     private boolean isCvsValid(String[] csvHeader) {
@@ -46,11 +52,10 @@ public class ReadCsvFileServiceImpl implements ReadFileService {
     }
 
     private boolean isLineValid(String[] nextLine) {
-        return nextLine.length == 5 && isNotEmpty(nextLine);
+        return nextLine.length == 5 && isObjectFull(nextLine);
     }
 
-    //rename
-    private boolean isNotEmpty(String[] array) {
+    private boolean isObjectFull(String[] array) {
         for (String str : array) {
             if (str.isEmpty()) {
                 return false;

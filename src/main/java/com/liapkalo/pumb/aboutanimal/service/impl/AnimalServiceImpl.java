@@ -21,7 +21,7 @@ public class AnimalServiceImpl implements AnimalService {
 
     private final AnimalRepository animalRepository;
 
-    private static final int PAYMENT_BATCH_SIZE = 200;
+    private static final int ANIMAL_BATCH_SIZE = 200;
 
     @Override
     public void createAnimal(AnimalDto animalDto) {
@@ -29,26 +29,14 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public AnimalDto buildAnimalDto(String[] line) {
-        return AnimalDto.builder()
-                .name(line[0].trim())
-                .type(line[1].trim())
-                .sex(line[2].trim())
-                .weight(Integer.parseInt(line[3].trim()))
-                .cost(Integer.parseInt(line[4].trim()))
-                .build();
-    }
-
-    @Override
     public List<Animal> getFilteredAnimals(String type, String category, String gender, String sortBy) {
         List<Long> allAnimalIds = animalRepository.findAllAnimalIds();
         List<Animal> filteredAnimals = new ArrayList<>();
 
-        for (List<Long> animalIdsBatch : ListUtils.splitList(allAnimalIds, PAYMENT_BATCH_SIZE)) {
-            filteredAnimals(
-                    new FilteredAnimalDto(type, category, gender),
-                    filteredAnimals,
-                    getAnimalsBatch(animalIdsBatch));
+        for (List<Long> animalIdsBatch : ListUtils.splitList(allAnimalIds, ANIMAL_BATCH_SIZE)) {
+            filteredAnimals(new FilteredAnimalDto(type, category, gender),
+                            filteredAnimals,
+                            getAnimalsBatch(animalIdsBatch));
         }
 
         if (sortBy != null) {
@@ -58,17 +46,16 @@ public class AnimalServiceImpl implements AnimalService {
         return filteredAnimals;
     }
 
-    private static void sortAnimals(String sortBy, List<Animal> filteredAnimals) {
-        filteredAnimals.sort((animal1, animal2) -> {
-            return switch (sortBy.toLowerCase()) {
-                case "name" -> animal1.getName().compareTo(animal2.getName());
-                case "weight" -> Integer.compare(animal1.getWeight(), animal2.getWeight());
-                case "type" -> animal1.getType().compareTo(animal2.getType());
-                case "category" -> Integer.compare(animal1.getCategory(), animal2.getCategory());
-                case "gender" -> animal1.getSex().compareTo(animal2.getSex());
-                case "cost" -> Integer.compare(animal1.getCost(), animal2.getCost());
-                default -> throw new IllegalArgumentException("Invalid sortBy value: " + sortBy);
-            };
+    private void sortAnimals(String sortBy, List<Animal> filteredAnimals) {
+        filteredAnimals.sort((animal1, animal2) ->
+                switch (sortBy.toLowerCase()) {
+            case "name" -> animal1.getName().compareTo(animal2.getName());
+            case "weight" -> Integer.compare(animal1.getWeight(), animal2.getWeight());
+            case "type" -> animal1.getType().compareTo(animal2.getType());
+            case "category" -> Integer.compare(animal1.getCategory(), animal2.getCategory());
+            case "gender" -> animal1.getSex().compareTo(animal2.getSex());
+            case "cost" -> Integer.compare(animal1.getCost(), animal2.getCost());
+            default -> throw new IllegalArgumentException("Invalid sortBy value: " + sortBy);
         });
     }
 

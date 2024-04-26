@@ -8,6 +8,6 @@ import java.util.List;
 public interface AnimalService {
 
     void createAnimal(AnimalDto animalDto);
-    AnimalDto buildAnimalDto(String[] line);
+
     List<Animal> getFilteredAnimals(String type, String category, String gender, String sortBy);
 }

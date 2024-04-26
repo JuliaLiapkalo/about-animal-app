@@ -2,8 +2,6 @@ package com.liapkalo.pumb.aboutanimal.service;
 
 import com.liapkalo.pumb.aboutanimal.entity.Animal;
 import com.liapkalo.pumb.aboutanimal.entity.dto.AnimalDto;
-import com.liapkalo.pumb.aboutanimal.enums.Sex;
-import com.liapkalo.pumb.aboutanimal.enums.Type;
 import com.liapkalo.pumb.aboutanimal.repository.AnimalRepository;
 import com.liapkalo.pumb.aboutanimal.service.impl.AnimalServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,11 +39,6 @@ public class AnimalServiceTests {
         AnimalDto animalDto = new AnimalDto("Luna", "Cat", "Female", 5, 50, 3);
         animalService.createAnimal(animalDto);
         verify(animalRepository).save(any(Animal.class));
-    }
-
-    @Test
-    void testCreateAnimalWithNullName() {
-
     }
 
     @Test

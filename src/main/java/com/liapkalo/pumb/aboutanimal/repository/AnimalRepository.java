@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
-    @Query(value = "select id from animal", nativeQuery = true)
+    @Query(value = "select id from animals", nativeQuery = true)
     List<Long> findAllAnimalIds();
 }

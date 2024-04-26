@@ -29,14 +29,13 @@ public class ReadXmlFileServiceImpl implements ReadFileService {
             JAXBContext context = JAXBContext.newInstance(AnimalsDto.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             AnimalsDto animals = (AnimalsDto) unmarshaller.unmarshal(file.getInputStream());
-            isNotEmpty(animals.getAnimals()).forEach(a -> animalService.createAnimal(a));
+            isObjectFull(animals.getAnimals()).forEach(a -> animalService.createAnimal(a));
         } catch (JAXBException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    //rename
-    private List<AnimalDto> isNotEmpty(List<AnimalDto> animals) {
+    private List<AnimalDto> isObjectFull(List<AnimalDto> animals) {
         return animals.stream().filter(a -> Objects.nonNull(a.getName()))
                         .filter(a -> Objects.nonNull(a.getType()))
                         .filter(a -> Objects.nonNull(a.getSex()))

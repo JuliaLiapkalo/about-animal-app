@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static com.liapkalo.pumb.aboutanimal.utils.CsvUtils.*;
+import static com.liapkalo.pumb.aboutanimal.utils.DtoUtils.buildAnimalDto;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,8 +39,6 @@ public class ReadCsvFileServiceTests {
         InputStream inputStream = new ByteArrayInputStream(csvData.getBytes());
         MockMultipartFile file = new MockMultipartFile("file", "animals.csv", "text/csv", inputStream);
 
-        when(animalService.buildAnimalDto(any())).thenReturn(new AnimalDto());
-
         readCsvFileService.readFile(file);
 
         verify(animalService, times(2)).createAnimal(any());
@@ -61,8 +60,6 @@ public class ReadCsvFileServiceTests {
         String csvData = buildCsvWithInvalidAnimal();
         InputStream inputStream = new ByteArrayInputStream(csvData.getBytes());
         MockMultipartFile file = new MockMultipartFile("file", "animals.csv", "text/csv", inputStream);
-
-        when(animalService.buildAnimalDto(any())).thenReturn(new AnimalDto());
 
         readCsvFileService.readFile(file);
 
