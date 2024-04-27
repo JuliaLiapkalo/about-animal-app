@@ -6,10 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
     @Query(value = "select id from animals", nativeQuery = true)
-    List<Long> findAllAnimalIds();
+    Optional<List<Long>> findAllAnimalIds();
 }

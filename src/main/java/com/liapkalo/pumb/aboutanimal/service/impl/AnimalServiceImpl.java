@@ -49,7 +49,7 @@ public class AnimalServiceImpl implements AnimalService {
 
     private void filteredAnimalsByBatch(FilteredAnimalDto filter, List<Animal> filteredAnimals) {
         log.info("Start getting and filter animals");
-        List<Long> allAnimalIds = animalRepository.findAllAnimalIds();
+        List<Long> allAnimalIds = animalRepository.findAllAnimalIds().orElseThrow(() -> new IllegalArgumentException("Zero objects in DB"));
         for (List<Long> animalIdsByBatch : ListUtils.splitList(allAnimalIds, ANIMAL_BATCH_SIZE)) {
             filteredAnimals(filter, filteredAnimals, getAnimalsByBatch(animalIdsByBatch));
         }

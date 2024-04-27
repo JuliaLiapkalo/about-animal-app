@@ -48,7 +48,7 @@ public class AnimalServiceTests {
         animalCat2.setId(3L);
         animalCat2.setName("Ali");
         Animal animalDog = buildDogAnimal();
-        when(animalRepository.findAllAnimalIds()).thenReturn(Arrays.asList(1L, 2L, 3L));
+        when(animalRepository.findAllAnimalIds()).thenReturn(Optional.of(Arrays.asList(1L, 2L, 3L)));
         when(animalRepository.findById(1L)).thenReturn(Optional.of(animalCat));
         when(animalRepository.findById(2L)).thenReturn(Optional.of(animalDog));
         when(animalRepository.findById(3L)).thenReturn(Optional.of(animalCat2));
