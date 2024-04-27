@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "animals")
+@Table(name = "animals", indexes = {@Index(name = "idx_animal_name", columnList = "name")})
 public class Animal {
 
     @Id

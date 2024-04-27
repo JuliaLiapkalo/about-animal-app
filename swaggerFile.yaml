@@ -6,6 +6,7 @@ info:
 servers:
   - url: http://localhost:8086/api/v1
 paths:
+  ## to test you can use files by the path: src/main/resources/csvAndXmlFiles.
   /animals/uploads:
     post:
       summary: Add animals to DB from CSV or XML file
@@ -25,6 +26,15 @@ paths:
                 file:
                   type: string
                   format: binary
+
+  #In my local machine this method dosnt work correctly via swagger,
+  #I was truing to fix this, but its seems like bug into swagger Ui.
+  #Please, try this into generate request in HTTP client in ide or postman. ;)
+  ##GET http://localhost:8086/api/v1/animals?
+  #    type=cat&
+  #    category=3&
+  #    gender=male&
+  #    sortBy=cost
   /animals:
     get:
       summary: Get filtered and sorted animals
