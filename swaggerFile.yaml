@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Animals API
-  description: ll
+  description: This app provide an API that allows users to upload CSV and XML files containing animal data. The API map this data to POJOs (Plain Old Java Objects) and perform validation to ensure each object contains essential fields. Animals be categorized based on their cost, and provide endpoints for filtering and sorting the data.
   version: 1.0.0
 servers:
   - url: http://localhost:8086/api/v1
@@ -55,6 +55,12 @@ paths:
       responses:
         '200':
           description: OK. Retrieved filtered animals successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
         '400':
           description: Bad request. Invalid filter parameters.
         '404':
