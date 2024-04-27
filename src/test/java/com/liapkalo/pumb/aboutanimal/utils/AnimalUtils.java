@@ -3,7 +3,9 @@ package com.liapkalo.pumb.aboutanimal.utils;
 import com.liapkalo.pumb.aboutanimal.entity.Animal;
 import com.liapkalo.pumb.aboutanimal.enums.Sex;
 import com.liapkalo.pumb.aboutanimal.enums.Type;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class AnimalUtils {
 
     public static Animal buildCatAnimal() {

@@ -1,5 +1,8 @@
 package com.liapkalo.pumb.aboutanimal.utils;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class CsvUtils {
 
     public static String buildCsvWithTwoAnimals() {
