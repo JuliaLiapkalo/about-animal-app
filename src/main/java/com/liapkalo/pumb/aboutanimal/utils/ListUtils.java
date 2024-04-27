@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ListUtils {
 
-    private void ListUtil() {
+    public ListUtils() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

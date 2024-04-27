@@ -7,11 +7,13 @@ import com.liapkalo.pumb.aboutanimal.service.impl.ReadXmlFileServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -24,10 +26,13 @@ public class ReadFileFactory {
 
     public ReadFileService getFileReader(MultipartFile file) {
         if (Objects.requireNonNull(file.getContentType()).contains(CSV_TYPE)) {
+            log.info("Creating ReadCsvFileService for file: {}", file.getOriginalFilename());
             return new ReadCsvFileServiceImpl(animalService);
         } else if (Objects.requireNonNull(file.getContentType()).contains(XML_TYPE)) {
+            log.info("Creating ReadXmlFileService for file: {}", file.getOriginalFilename());
             return new ReadXmlFileServiceImpl(animalService);
         }
+        log.error("Unsupported file type: {}", file.getContentType());
         throw new IllegalArgumentException("Unsupported file type");
     }
 

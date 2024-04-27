@@ -5,15 +5,16 @@ import com.liapkalo.pumb.aboutanimal.service.ReadFileService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static com.liapkalo.pumb.aboutanimal.utils.DtoUtils.buildAnimalDto;
+import static com.liapkalo.pumb.aboutanimal.utils.BuildUtils.buildAnimalDto;
 
-
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ReadCsvFileServiceImpl implements ReadFileService {
@@ -22,7 +23,6 @@ public class ReadCsvFileServiceImpl implements ReadFileService {
 
     @Override
     public void readFile(MultipartFile file) {
-
         try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             String[] csvHeader = reader.readNext();
             if (isCvsValid(csvHeader)) {
@@ -31,9 +31,8 @@ public class ReadCsvFileServiceImpl implements ReadFileService {
                     createAnimal(nextLine);
                 }
             }
-
             } catch(IOException | CsvValidationException e){
-                throw new RuntimeException(e);
+                log.error("Error reading CSV file", e);
             }
     }
 

@@ -5,11 +5,13 @@ import com.liapkalo.pumb.aboutanimal.service.AnimalService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/animals")
@@ -22,6 +24,7 @@ public class AnimalController {
     @PostMapping("/uploads")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> processAnimalFile(@RequestParam("file") MultipartFile file) {
+        log.info("Received request to process animal file");
         readFileFactory.getFileReader(file).readFile(file);
         return ResponseEntity.ok().build();
     }
@@ -32,6 +35,7 @@ public class AnimalController {
                                                @RequestParam(required = false) String gender,
                                                @RequestParam(required = false) String sortBy
     ) {
+        log.info("Received request to get filtered animals");
         return ResponseEntity.ok().body(animalService.getFilteredAnimals(type, category, gender, sortBy));
     }
 }

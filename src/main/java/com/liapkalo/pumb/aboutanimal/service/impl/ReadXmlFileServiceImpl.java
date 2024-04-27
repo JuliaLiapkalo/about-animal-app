@@ -8,6 +8,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ReadXmlFileServiceImpl implements ReadFileService {
@@ -31,7 +32,7 @@ public class ReadXmlFileServiceImpl implements ReadFileService {
             AnimalsDto animals = (AnimalsDto) unmarshaller.unmarshal(file.getInputStream());
             isObjectFull(animals.getAnimals()).forEach(a -> animalService.createAnimal(a));
         } catch (JAXBException | IOException e) {
-            throw new RuntimeException(e);
+            log.error("Error reading XML file", e);
         }
     }
 

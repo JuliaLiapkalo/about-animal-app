@@ -3,18 +3,22 @@ package com.liapkalo.pumb.aboutanimal.service.impl;
 import com.liapkalo.pumb.aboutanimal.entity.Animal;
 import com.liapkalo.pumb.aboutanimal.entity.dto.AnimalDto;
 import com.liapkalo.pumb.aboutanimal.entity.dto.FilteredAnimalDto;
-import com.liapkalo.pumb.aboutanimal.enums.Sex;
-import com.liapkalo.pumb.aboutanimal.enums.Type;
 import com.liapkalo.pumb.aboutanimal.repository.AnimalRepository;
 import com.liapkalo.pumb.aboutanimal.service.AnimalService;
 import com.liapkalo.pumb.aboutanimal.utils.ListUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.liapkalo.pumb.aboutanimal.utils.BuildUtils.buildAnimal;
+import static com.liapkalo.pumb.aboutanimal.utils.FilterUtils.*;
+import static com.liapkalo.pumb.aboutanimal.utils.SortUtils.*;
+
+@Slf4j
 @Service
 @AllArgsConstructor
 public class AnimalServiceImpl implements AnimalService {
@@ -25,86 +29,58 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public void createAnimal(AnimalDto animalDto) {
-       animalRepository.save(buildAnimal(animalDto));
+        log.info("Creating animal: {}", animalDto);
+        animalRepository.save(buildAnimal(animalDto));
+        log.info("Animal was created: {}", animalDto);
     }
 
     @Override
     public List<Animal> getFilteredAnimals(String type, String category, String gender, String sortBy) {
-        List<Long> allAnimalIds = animalRepository.findAllAnimalIds();
         List<Animal> filteredAnimals = new ArrayList<>();
+        filteredAnimalsByBatch(new FilteredAnimalDto(type, category, gender), filteredAnimals);
 
-        for (List<Long> animalIdsBatch : ListUtils.splitList(allAnimalIds, ANIMAL_BATCH_SIZE)) {
-            filteredAnimals(new FilteredAnimalDto(type, category, gender),
-                            filteredAnimals,
-                            getAnimalsBatch(animalIdsBatch));
-        }
-
+        log.info("Start sorting animals");
         if (sortBy != null) {
             sortAnimals(sortBy, filteredAnimals);
         }
-
+        log.info("Successfully sorting animals");
         return filteredAnimals;
+    }
+
+    private void filteredAnimalsByBatch(FilteredAnimalDto filter, List<Animal> filteredAnimals) {
+        log.info("Start getting and filter animals");
+        List<Long> allAnimalIds = animalRepository.findAllAnimalIds();
+        for (List<Long> animalIdsByBatch : ListUtils.splitList(allAnimalIds, ANIMAL_BATCH_SIZE)) {
+            filteredAnimals(filter, filteredAnimals, getAnimalsByBatch(animalIdsByBatch));
+        }
+        log.info("Successfully get filtered animals");
+    }
+
+    private void filteredAnimals(FilteredAnimalDto filter, List<Animal> filteredAnimals, List<Animal> animalList) {
+        filteredAnimals.addAll(animalList.stream()
+                .filter(animal -> filterByType(filter, animal))
+                .filter(animal -> filterByCategory(filter, animal))
+                .filter(animal -> filterByGender(filter, animal))
+                .toList());
     }
 
     private void sortAnimals(String sortBy, List<Animal> filteredAnimals) {
         filteredAnimals.sort((animal1, animal2) ->
                 switch (sortBy.toLowerCase()) {
-            case "name" -> animal1.getName().compareTo(animal2.getName());
-            case "weight" -> Integer.compare(animal1.getWeight(), animal2.getWeight());
-            case "type" -> animal1.getType().compareTo(animal2.getType());
-            case "category" -> Integer.compare(animal1.getCategory(), animal2.getCategory());
-            case "gender" -> animal1.getSex().compareTo(animal2.getSex());
-            case "cost" -> Integer.compare(animal1.getCost(), animal2.getCost());
+            case "name" -> sortAnimalByName(animal1, animal2);
+            case "weight" -> sortAnimalByWeight(animal1, animal2);
+            case "type" -> sortAnimalByType(animal1, animal2);
+            case "category" -> sortAnimalByCategory(animal1, animal2);
+            case "gender" -> sortAnimalByGender(animal1, animal2);
+            case "cost" -> sortAnimalByCost(animal1, animal2);
             default -> throw new IllegalArgumentException("Invalid sortBy value: " + sortBy);
         });
     }
 
-    private void filteredAnimals(FilteredAnimalDto filter, List<Animal> filteredAnimals, List<Animal> animalList) {
-        filteredAnimals.addAll(animalList.stream()
-                .filter(animal -> filter.getType() == null || Objects.equals(animal.getType(), getType(filter.getType())))
-                .filter(animal -> filter.getCategory() == null || animal.getCategory() == Integer.parseInt(filter.getCategory()))
-                .filter(animal -> filter.getGender() == null || Objects.equals(animal.getSex(), getSex(filter.getGender())))
-                .toList());
-    }
-
-    private List<Animal> getAnimalsBatch(List<Long> animalIdsBatch) {
+    private List<Animal> getAnimalsByBatch(List<Long> animalIdsBatch) {
         return animalIdsBatch.stream()
                 .map(id -> animalRepository.findById(id).orElse(null))
                 .filter(Objects::nonNull)
                 .toList();
-    }
-
-
-    private Sex getSex(String sex) {
-        return Sex.valueOf("MALE").getSex().equals(sex) ? Sex.MALE : Sex.FEMALE;
-    }
-
-    private Type getType(String type) {
-        return Type.valueOf("CAT").getAnimalType().equals(type) ? Type.CAT : Type.DOG;
-    }
-
-    private int findCategory(Integer cost) {
-        int category;
-        if (cost > 60) {
-            category = 4;
-        } else if (cost > 40) {
-            category = 3;
-        } else if (cost > 20) {
-            category = 2;
-        } else {
-            category = 1;
-        }
-        return category;
-    }
-
-    private Animal buildAnimal(AnimalDto animalDto) {
-        return Animal.builder()
-                .name(animalDto.getName())
-                .type(getType(animalDto.getType()))
-                .category(findCategory(animalDto.getCost()))
-                .cost(animalDto.getCost())
-                .sex(getSex(animalDto.getSex()))
-                .weight(animalDto.getWeight())
-                .build();
     }
 }

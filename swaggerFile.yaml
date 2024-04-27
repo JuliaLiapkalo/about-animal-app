@@ -1,16 +1,15 @@
 openapi: 3.0.0
 info:
   title: Animals API
-  description: This app provide an API that allows users to upload CSV and XML files containing animal data. The API map this data to POJOs (Plain Old Java Objects) and perform validation to ensure each object contains essential fields. Animals be categorized based on their cost, and provide endpoints for filtering and sorting the data.
+  description: This app provides an API that allows users to upload CSV and XML files containing animal data. The API maps this data to POJOs (Plain Old Java Objects) and performs validation to ensure each object contains essential fields. Animals are categorized based on their cost, and endpoints are provided for filtering and sorting the data.
   version: 1.0.0
 servers:
   - url: http://localhost:8086/api/v1
 paths:
   /animals/uploads:
     post:
-      summary: Add animals to DB from CSV or XML file.
+      summary: Add animals to DB from CSV or XML file
       description: Uploads a CSV or XML file containing animal data to add to the database.
-      operationId: processAnimalFile
       responses:
         '200':
           description: Animals added to the database successfully.
@@ -28,9 +27,8 @@ paths:
                   format: binary
   /animals:
     get:
-      summary: Get filtered and sorted animals.
+      summary: Get filtered and sorted animals
       description: Retrieves animals from the database based on provided filters.
-      operationId: getFilteredAnimals
       parameters:
         - in: query
           name: type
@@ -51,7 +49,7 @@ paths:
           name: sortBy
           schema:
             type: string
-          description: Sort by a any [name/type/sex/weight/cost/category] field.
+          description: Sort by any [name/type/sex/weight/cost/category] field.
       responses:
         '200':
           description: OK. Retrieved filtered animals successfully.
