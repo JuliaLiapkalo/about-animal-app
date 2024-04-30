@@ -4,7 +4,9 @@ import com.liapkalo.pumb.aboutanimal.service.AnimalService;
 import com.liapkalo.pumb.aboutanimal.service.ReadFileService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,7 @@ import static com.liapkalo.pumb.aboutanimal.utils.BuildUtils.buildAnimalDto;
 @Slf4j
 @Service
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ReadCsvFileServiceImpl implements ReadFileService {
 
     AnimalService animalService;

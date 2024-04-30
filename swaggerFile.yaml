@@ -33,7 +33,7 @@ paths:
   ##GET http://localhost:8086/api/v1/animals?
   #    type=cat&
   #    category=3&
-  #    gender=male&
+  #    sex=male&
   #    sortBy=cost
   /animals:
     get:
@@ -51,7 +51,7 @@ paths:
             type: string
           description: Filter by category[1/2/3/4] of animal.
         - in: query
-          name: gender
+          name: sex
           schema:
             type: string
           description: Filter by gender [male/female] of animal.

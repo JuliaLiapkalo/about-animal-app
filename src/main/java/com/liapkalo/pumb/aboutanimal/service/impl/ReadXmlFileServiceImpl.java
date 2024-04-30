@@ -7,7 +7,9 @@ import com.liapkalo.pumb.aboutanimal.service.ReadFileService;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ReadXmlFileServiceImpl implements ReadFileService {
 
     AnimalService animalService;
@@ -30,7 +33,7 @@ public class ReadXmlFileServiceImpl implements ReadFileService {
             JAXBContext context = JAXBContext.newInstance(AnimalsDto.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             AnimalsDto animals = (AnimalsDto) unmarshaller.unmarshal(file.getInputStream());
-            isObjectFull(animals.getAnimals()).forEach(a -> animalService.createAnimal(a));
+            isObjectFull(animals.getAnimals()).forEach(animalService::createAnimal);
         } catch (JAXBException | IOException e) {
             log.error("Error reading XML file", e);
         }
@@ -42,7 +45,6 @@ public class ReadXmlFileServiceImpl implements ReadFileService {
                         .filter(a -> Objects.nonNull(a.getSex()))
                         .filter(a -> Objects.nonNull(a.getCost()))
                         .filter(a -> Objects.nonNull(a.getWeight()))
-                        .filter(a -> Objects.isNull(a.getCategory()))
                 .collect(Collectors.toList());
 
     }

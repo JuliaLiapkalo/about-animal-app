@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FilteredAnimalDto {
+public class FilterAnimalDto {
 
     String type;
     String category;
-    String gender;
+    String sex;
 }

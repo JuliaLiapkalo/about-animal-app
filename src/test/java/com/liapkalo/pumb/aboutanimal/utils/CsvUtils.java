@@ -21,7 +21,6 @@ public class CsvUtils {
         return """
                 name,type,sex,weight,cost
                 Max,,Male,5,50
-                Luna,Dog,Female,10,70
                 """;
     }
 

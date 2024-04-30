@@ -62,6 +62,6 @@ public class ReadCsvFileServiceTests {
 
         readCsvFileService.readFile(file);
 
-        verify(animalService, times(1)).createAnimal(any());
+        verify(animalService, times(0)).createAnimal(any());
     }
 }

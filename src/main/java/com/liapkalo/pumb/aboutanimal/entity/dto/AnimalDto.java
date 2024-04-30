@@ -24,6 +24,5 @@ public class AnimalDto {
     Integer weight;
     @XmlElement
     Integer cost;
-    Integer category;
 
 }

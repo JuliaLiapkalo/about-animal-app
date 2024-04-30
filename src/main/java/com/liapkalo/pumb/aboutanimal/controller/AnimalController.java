@@ -1,5 +1,6 @@
 package com.liapkalo.pumb.aboutanimal.controller;
 
+import com.liapkalo.pumb.aboutanimal.entity.dto.FilterAnimalDto;
 import com.liapkalo.pumb.aboutanimal.factory.ReadFileFactory;
 import com.liapkalo.pumb.aboutanimal.service.AnimalService;
 import lombok.AccessLevel;
@@ -32,10 +33,10 @@ public class AnimalController {
     @GetMapping()
     public ResponseEntity<?> getFiltersAnimals(@RequestParam(required = false) String type,
                                                @RequestParam(required = false) String category,
-                                               @RequestParam(required = false) String gender,
+                                               @RequestParam(required = false) String sex,
                                                @RequestParam(required = false) String sortBy
     ) {
         log.info("Received request to get filtered animals");
-        return ResponseEntity.ok().body(animalService.getFilteredAnimals(type, category, gender, sortBy));
+        return ResponseEntity.ok().body(animalService.getFilteredAnimals(new FilterAnimalDto(type, category, sex), sortBy));
     }
 }

@@ -13,6 +13,7 @@ public class ExtractEnumUtils {
         return Sex.valueOf("MALE").getSex().equals(sex) ? Sex.MALE : Sex.FEMALE;
     }
 
+    //In this version of program exist only two type of animal like in examples file.
     public static Type getType(String type) {
         return Type.valueOf("CAT").getAnimalType().equals(type) ? Type.CAT : Type.DOG;
     }
