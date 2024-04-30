@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class AnimalSpecifications {
 
-    public static Specification<Animal> filterByTypeCategoryAndGender(FilterAnimalDto filterAnimalDto) {
+    public static Specification<Animal> filterAnimal(FilterAnimalDto filterAnimalDto) {
         return Specification.where(
                 filterAnimalDto.getType() == null ? null :
                         AnimalSpecifications.hasType(filterAnimalDto.getType()))

@@ -38,7 +38,7 @@ public class AnimalServiceImpl implements AnimalService {
     public List<Animal> getFilteredAnimals(FilterAnimalDto filterAnimalDto, String sortBy) {
         log.info("Start filter animals");
         List<Animal> filteredAnimals =
-                animalRepository.findAll(AnimalSpecifications.filterByTypeCategoryAndGender(filterAnimalDto));
+                animalRepository.findAll(AnimalSpecifications.filterAnimal(filterAnimalDto));
 
         return sortBy != null ? sortAnimals(sortBy, filteredAnimals) : filteredAnimals;
     }
